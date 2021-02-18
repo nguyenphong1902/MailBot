@@ -4,6 +4,7 @@ Yêu cầu để chạy đc script:
 - Cài đặt Python và pip
 - Cài đặt thư viện bằng cách Mở cmd đến thư mục chứa project, gõ: pip install -r requirement.txt
 - Nếu chromedriver ko chạy thì phải tải chromedriver mới tương ứng với Google chrome đang dùng 
+- Cài ffmpeg cho window và copy thư mục ffmpeg vào project folder
 - Thay đổi địa chỉ hòm mail mong muốn trong file main.py
 - Mail đơn hàng có dạng:
 ###
