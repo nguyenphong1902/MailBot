@@ -7,7 +7,7 @@ Yêu cầu để chạy đc script:
 - Cài ffmpeg cho window và copy thư mục ffmpeg vào project folder
 - Thay đổi địa chỉ hòm mail mong muốn trong file main.py
 - Mail đơn hàng có dạng:
-###
+
 Dear MES,
 
 I want to order:
@@ -33,4 +33,3 @@ Order Team: Business Manager
 ETC:
 
 Thanks!
-###
