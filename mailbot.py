@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from order import Order
 
 
@@ -110,6 +111,9 @@ class MailBot:
         if len(search_data[0]) > 0:
             # Khởi tạo chrome driver
             chrome_driver_path = "chromedriver.exe"
+            userdata = webdriver.ChromeOptions()
+            Options.add_argument(userdata,
+                                 "user-data-dir=C:\\Users\\dev2\\AppData\\Local\\Google\\Chrome\\User Data\\Default")
             driver = webdriver.Chrome(chrome_driver_path)
 
             # Mở trang pleiger bằng chrome và đăng nhập
@@ -122,6 +126,12 @@ class MailBot:
             password_input.send_keys(PASSWORD)
             login_button = driver.find_element_by_id('btnLogin')
             login_button.click()
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "btnlanguage"))
+            ).click()
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//a[@href='/ko/Home/OnGetSetCultureCookie?cltr=en']"))
+            ).click()
 
             # Vòng lặp cho từng email tìm được
             for uid in search_data[0].split():
@@ -177,9 +187,10 @@ class MailBot:
                         if value[2] == "dropdown":
                             WebDriverWait(driver, 2).until(
                                 EC.presence_of_element_located(
-                                    (By.XPATH, '//div[contains(text(),\'{}\')]'.format(value[1])))
+                                    (By.XPATH, '//div[contains(text(),\'{}\') and @class=\'dx-item-content dx-list-item-content\']'.format(value[1])))
                             ).click()
                         # time.sleep(2)
+
                     except Exception as e:
                         try:
                             input_info = driver.find_element_by_xpath(xpath)
@@ -194,16 +205,41 @@ class MailBot:
                             print(str(e) + " ")
                 # Click Close/Save
                 try:
+                    # # Close
+                    # WebDriverWait(driver, 10).until(
+                    #     EC.presence_of_element_located((By.XPATH,
+                    #                                     "//button[@class='btn btn-sm btn-secondary']"))
+                    # ).click()
+
+                    # Save
                     WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.XPATH,
-                                                        "//button[@class='btn btn-sm btn-secondary']"))
+                                                        "//button[contains(@id,'btnSave')]"))
                     ).click()
+
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH,
+                                                        "//div[@class='dx-item-content dx-toolbar-item-content']"))
+                    )
+                    ele_found = driver.find_elements_by_xpath("//div[@class='dx-item-content dx-toolbar-item-content']//div[contains(text(),'Success')]")
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH,
+                                                        "//div[@aria-label='OK' and @role='button']"))
+                    ).click()
+                    if len(ele_found)==0:
+                        print("Import Fail")
+                        # Close
+                        WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.XPATH,
+                                                            "//button[@class='btn btn-sm btn-secondary']"))
+                        ).click()
+                    else:
+                        print("Import Sucess")
+                    # driver.refresh()
                 except Exception as ex:
                     print(str(ex) + " ")
                     driver.refresh()
                     continue
-
-                print("import success")
 
             driver.quit()
 
