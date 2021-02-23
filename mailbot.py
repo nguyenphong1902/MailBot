@@ -1,6 +1,7 @@
 import imaplib
 import email
 import datetime
+import time
 import os
 import pandas as pd
 import html2text
@@ -222,6 +223,7 @@ class MailBot:
                                                         "//div[@class='dx-item-content dx-toolbar-item-content']"))
                     )
                     ele_found = driver.find_elements_by_xpath("//div[@class='dx-item-content dx-toolbar-item-content']//div[contains(text(),'Success')]")
+                    time.sleep(0.5)
                     WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.XPATH,
                                                         "//div[@aria-label='OK' and @role='button']"))
@@ -238,7 +240,7 @@ class MailBot:
                     # driver.refresh()
                 except Exception as ex:
                     print(str(ex) + " ")
-                    driver.refresh()
+                    # driver.refresh()
                     continue
 
             driver.quit()
